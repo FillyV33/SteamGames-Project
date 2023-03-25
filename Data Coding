@@ -1,0 +1,105 @@
+import pandas as pd
+import numpy as np
+from scipy import stats
+from scipy.stats import ttest_rel
+
+SteamData = pd.read_csv("C:/ExampleUser/Steam.csv)
+
+# data wrangle - ensuring lenght of arrays match each other, I am using from the genre column - ACTION, RACING, SIMULATION
+# make action and price same length 
+
+# FILTERED VARIABLE #
+ActPriceWrangle = SteamData.loc[SteamData['genres']== 'Action', ['genres', 'price']]
+# FILTERED VARIABLE #
+print(ActPriceWrangle)
+
+# price is already continuous, however I need to code Action into a numerical value
+#this line is a filtered row
+action_price = ActPriceWrangle['price']
+
+#Using Pandas this was easy
+Action_Numeric = pd.to_numeric(ActPriceWrangle['genres'] == 'Action')
+
+
+#now we can put this into our dependent t test 
+
+#dependent t-tests
+
+# run for 'Action, Racing, Simulation' # 
+
+ActionTestPrice = ttest_rel(action_price, Action_Numeric)
+
+print(ActionTestPrice)
+
+# rinse and repeat for the other two categories 
+
+# Racing is next
+
+RacePriceWrangle = SteamData.loc[SteamData['genres']== 'Racing', ['genres', 'price']]
+
+race_price = RacePriceWrangle['price']
+
+Race_Numeric = pd.to_numeric(RacePriceWrangle['genres'] == 'Racing')
+
+#t test
+
+Race_Test = ttest_rel(race_price, Race_Numeric)
+
+print(Race_Test)
+
+# Simulation
+
+SimPriceWrangle = SteamData.loc[SteamData['genres']== 'Simulation', ['genres', 'price']]
+
+Sim_Price = SimPriceWrangle['price']
+
+Sim_Numeric = pd.to_numeric(SimPriceWrangle['genres'] == 'Simulation')
+
+#t test
+
+Sim_Test = ttest_rel(Sim_Price, Sim_Numeric)
+
+print(Sim_Test)
+
+# the only coding that's left is to run dependent t tests with positive ratings
+# I will repeat the process with some minor adjustments 
+
+ActRatingWrangle = SteamData.loc[SteamData['genres']== 'Action', ['genres', 'positive_ratings']]
+#rating variable
+action_rating = ActRatingWrangle['positive_ratings']
+#categorical to numerical
+Action_Numeric2 = pd.to_numeric(ActRatingWrangle['genres'] == 'Action')
+
+#running t test 
+
+Action2_Test = ttest_rel(action_rating, Action_Numeric2)
+print(Action2_Test)
+
+#racing is next
+
+RaceRatingWrangle = SteamData.loc[SteamData['genres']== 'Racing', ['genres', 'positive_ratings']]
+#rating variable
+Racing_Rating= RaceRatingWrangle['positive_ratings']
+#numerical categorical value change
+Race2_Numeric= pd.to_numeric(RaceRatingWrangle['genres']=='Racing')
+
+#t test
+
+Race2_Test = ttest_rel(Racing_Rating, Race2_Numeric)
+print(Race2_Test)
+
+# last but not least is Simulation 
+
+SimRateWrangle = SteamData.loc[SteamData['genres']== 'Simulation', ['genres', 'positive_ratings']]
+#ratings variable
+Sim_Rating = SimRateWrangle['positive_ratings']
+#catergorical to numerical
+Sim2_Numeric = pd.to_numeric(SimRateWrangle['genres']=='Simulation')
+
+#t test
+
+Sim2_Test = ttest_rel(Sim_Rating, Sim2_Numeric)
+print(Sim2_Test)
+
+#that's all!
+
